@@ -15,8 +15,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-redis_host = os.getenv("REDIS_HOST", "localhost")
-r = redis.Redis(host=redis_host, port=6379, decode_responses=True)
+REDIS_HOST = os.getenv("REDIS_HOST", "redis-service")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+
+r = redis.Redis(
+    host=REDIS_HOST, 
+    port=REDIS_PORT, 
+    decode_responses=True,
+    socket_connect_timeout=5
+)
 
 @app.post("/vote/{color}")
 async def vote(color: str):

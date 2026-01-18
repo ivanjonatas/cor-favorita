@@ -1,0 +1,52 @@
+# ops/helm/voter-app/templates/backend.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: votar-api
+spec:
+  replicas: {{ .Values.replicaCount | default 2 }}
+  selector:
+    matchLabels:
+      app: votar-api
+  template:
+    metadata:
+      labels:
+        app: votar-api
+    spec:
+      containers:
+        - name: votar-api
+          image: {{ .Values.backend.image }}
+          ports:
+            - containerPort: {{ .Values.backend.port }}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          env:
+            - name: REDIS_HOST
+              value: {{ .Values.backend.env.REDIS_HOST | quote }}
+            - name: REDIS_PORT
+              value: {{ .Values.backend.env.REDIS_PORT | quote }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.backend.port }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.backend.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: votar-api-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8001
+      targetPort: {{ .Values.backend.port }}
+  selector:
+    app: votar-api

@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "votar-app.fullname" . }}:{{ .Values.service.port }}']
+      args: ['votar-api-service:8001/health']
   restartPolicy: Never

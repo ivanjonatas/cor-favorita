@@ -24,3 +24,5 @@ O projeto é dividido em quatro componentes principais e uma camada de infraestr
 * **Kubernetes**: Orquestração e escalabilidade dos containers.
 * **Helm**: Gerenciamento de pacotes e versionamento do deploy.
 * **Nginx**: Servidor web de alta performance para os frontends.
+
+

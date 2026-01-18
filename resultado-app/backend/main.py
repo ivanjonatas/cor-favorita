@@ -12,7 +12,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-r = redis.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=6379, decode_responses=True)
+REDIS_HOST = os.getenv("REDIS_HOST", "redis-service")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+
+r = redis.Redis(
+    host=REDIS_HOST, 
+    port=REDIS_PORT, 
+    decode_responses=True,
+    socket_connect_timeout=5
+)
 
 @app.get("/resultado")
 async def get_results():
